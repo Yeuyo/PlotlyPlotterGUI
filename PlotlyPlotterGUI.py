@@ -152,7 +152,7 @@ class appWindow(QWidget):
         self.groupList = CheckableComboBox(self)
         self.figureTypes = QComboBox()
         figureTypeLabel = QLabel("Type of Figure:")
-        self.figureTypes.addItems(["Lines", "Scatter", "Bar"])
+        self.figureTypes.addItems(["Lines", "Scatter", "Bar", "SunBurst"])
         self.exportSVG = QPushButton("Export SVG")
         plotPanelLayout.addWidget(xLabel)
         plotPanelLayout.addWidget(self.xList)
@@ -195,6 +195,8 @@ class appWindow(QWidget):
                     self.figureData = px.scatter(self.data, x = xSelection[0], y = ySelection[0])
                 elif self.figureTypes.currentText() == "Bar":
                     self.figureData = px.bar(self.data, x = xSelection[0], y = ySelection[0])
+                elif self.figureTypes.currentText() == "SunBurst":
+                    self.figureData = px.sunburst(self.data, path = [xSelection[0], ySelection[0]])
             else:
                 if self.figureTypes.currentText() == "Lines":
                     self.figureData = px.line(self.data, x = xSelection[0], y = ySelection[0], color = gSelection[0])
@@ -202,6 +204,8 @@ class appWindow(QWidget):
                     self.figureData = px.scatter(self.data, x = xSelection[0], y = ySelection[0], color = gSelection[0])
                 elif self.figureTypes.currentText() == "Bar":
                     self.figureData = px.bar(self.data, x = xSelection[0], y = ySelection[0], color = gSelection[0])
+                elif self.figureTypes.currentText() == "SunBurst":
+                    self.figureData = px.sunburst(self.data, path = [gSelection[0], xSelection[0]])
             self.figure.setHtml(self.figureData.to_html(include_plotlyjs='cdn'))
         except:
             pass
@@ -239,7 +243,7 @@ class appWindow(QWidget):
                 self.table.setHorizontalHeaderLabels([str(col) for col in self.data.columns])
                 for row in range(self.data.shape[0]):
                     for col in range(self.data.shape[1]):
-                        self.table.setItem(col, row, QTableWidgetItem(str(self.data.iloc[row, col])))
+                        self.table.setItem(row, col, QTableWidgetItem(str(self.data.iloc[row, col])))
                 self.xList.addItems([str(col) for col in self.data.columns])
                 self.yList.addItems([str(col) for col in self.data.columns])
                 self.groupList.addItems([str(col) for col in self.data.columns])
